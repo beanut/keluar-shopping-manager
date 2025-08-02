@@ -87,7 +87,6 @@
 
             <div class="form-group">
                 <label for="category">Category</label>
-                <!-- This input is now linked to a datalist for autocomplete -->
                 <input list="category-list" type="text" id="category" name="category" placeholder="Select or type a new category" required>
                 <datalist id="category-list"></datalist>
             </div>
@@ -121,8 +120,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // --- START: FIREBASE CONFIGURATION ---
-        // IMPORTANT: Replace this with your project's Firebase web app config.
                 const firebaseConfig = {
   apiKey: "AIzaSyDmLhttC8aXZIWoIQM95Id_vPe7gObgkeg",
   authDomain: "keluar-a4469.firebaseapp.com",
@@ -132,9 +129,6 @@
   appId: "1:578437338277:web:a3faa6371ea9bffb8ee94c",
   measurementId: "G-21EBQDERCG"
 };
-        // --- END: FIREBASE CONFIGURATION ---
-
-        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -144,7 +138,6 @@
             const statusMessage = document.getElementById('status-message');
             const categoryList = document.getElementById('category-list');
 
-            // --- Function to populate the category datalist ---
             async function loadCategories() {
                 try {
                     const snapshot = await db.collection('categories').get();
