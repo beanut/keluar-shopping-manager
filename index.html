@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keluar Product Admin</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --light-gray: #f4f4f9;
+            --dark-gray: #333;
+            --border-color: #ddd;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        main {
+            background: white;
+            padding: 25px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 { text-align: center; color: var(--dark-gray); margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover:not(:disabled) { background-color: var(--primary-hover); }
+        button:disabled { background-color: #aaa; cursor: not-allowed; }
+        #status-message {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+        .success { color: var(--success-color); }
+        .error { color: var(--error-color); }
+    </style>
+</head>
+<body>
+
+    <main>
+        <h1>Add New Product</h1>
+        <form id="product-form">
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" id="name" name="name" placeholder="e.g., Modern Velvet Sofa" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <!-- This input is now linked to a datalist for autocomplete -->
+                <input list="category-list" type="text" id="category" name="category" placeholder="Select or type a new category" required>
+                <datalist id="category-list"></datalist>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" min="0" step="0.01" placeholder="e.g., 599.99" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="A brief description of the product." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg" required>
+            </div>
+
+            <div class="form-group">
+                <label for="rating">Rating (0.0 to 5.0)</label>
+                <input type="number" id="rating" name="rating" min="0" max="5" step="0.1" placeholder="e.g., 4.5">
+            </div>
+
+            <button type="submit" id="submit-btn">Add Product</button>
+        </form>
+        <p id="status-message"></p>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // --- START: FIREBASE CONFIGURATION ---
+        // IMPORTANT: Replace this with your project's Firebase web app config.
+                const firebaseConfig = {
+  apiKey: "AIzaSyDmLhttC8aXZIWoIQM95Id_vPe7gObgkeg",
+  authDomain: "keluar-a4469.firebaseapp.com",
+  projectId: "keluar-a4469",
+  storageBucket: "keluar-a4469.firebasestorage.app",
+  messagingSenderId: "578437338277",
+  appId: "1:578437338277:web:a3faa6371ea9bffb8ee94c",
+  measurementId: "G-21EBQDERCG"
+};
+        // --- END: FIREBASE CONFIGURATION ---
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const productForm = document.getElementById('product-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const statusMessage = document.getElementById('status-message');
+            const categoryList = document.getElementById('category-list');
+
+            // --- Function to populate the category datalist ---
+            async function loadCategories() {
+                try {
+                    const snapshot = await db.collection('categories').get();
+                    snapshot.forEach(doc => {
+                        const option = document.createElement('option');
+                        option.value = doc.data().name;
+                        categoryList.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error("Error loading categories:", error);
+                    statusMessage.textContent = 'Could not load categories.';
+                    statusMessage.className = 'error';
+                }
+            }
+
+            // Load categories when the page loads
+            await loadCategories();
+
+            productForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                submitBtn.disabled = true;
+                statusMessage.textContent = 'Submitting...';
+                statusMessage.className = '';
+
+                try {
+                    // --- 1. Let Firebase create a document reference with a new, auto-generated ID ---
+                    const newProductRef = db.collection('products').doc();
+                    
+                    const productData = {
+                        id: newProductRef.id, // Use the auto-generated ID
+                        name: document.getElementById('name').value,
+                        category: document.getElementById('category').value.trim(),
+                        description: document.getElementById('description').value,
+                        imageUrl: document.getElementById('imageUrl').value,
+                        price: parseFloat(document.getElementById('price').value) || 0,
+                        rating: parseFloat(document.getElementById('rating').value) || 0,
+                    };
+                    
+                    // --- 2. Check if the category needs to be created ---
+                    const categoryName = productData.category;
+                    const categoryRef = db.collection('categories').doc(categoryName);
+                    const categoryDoc = await categoryRef.get();
+
+                    if (!categoryDoc.exists) {
+                        // Category does not exist, so we create it
+                        await categoryRef.set({ name: categoryName });
+                        console.log(`New category "${categoryName}" created.`);
+                        
+                        // Also add it to the dropdown for immediate use
+                        const option = document.createElement('option');
+                        option.value = categoryName;
+                        categoryList.appendChild(option);
+                    }
+
+                    // --- 3. Save the new product data ---
+                    await newProductRef.set(productData);
+
+                    statusMessage.textContent = 'Product added successfully!';
+                    statusMessage.className = 'success';
+                    productForm.reset();
+
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    statusMessage.textContent = `Error: ${error.message}`;
+                    statusMessage.className = 'error';
+                } finally {
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
