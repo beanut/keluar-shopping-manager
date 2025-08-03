@@ -42,7 +42,7 @@
             padding: 10px 20px;
             border-radius: 5px;
             border: 1px solid var(--border-color);
-            background-color: #fff;
+            background-color: black;
             cursor: pointer;
             font-size: 16px;
             font-weight: 500;
@@ -301,7 +301,7 @@
 
         async function loadPromosToDelete() {
             const container = document.getElementById('promo-list-container');
-            container.innerHTML = '<h2>Existing Promo Codes</h2>';
+            // container.innerHTML = '<h2>Existing Promo Codes</h2>';
             const snapshot = await db.collection('promo_codes').orderBy('code').get();
             if (snapshot.empty) {
                 container.innerHTML += '<p>No promo codes found.</p>';
