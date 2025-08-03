@@ -7,102 +7,120 @@
     <style>
         :root {
             --primary-color: #007bff;
-            --primary-hover: #0056b3;
+            --primary-hover: #0069d9;
             --danger-color: #dc3545;
             --danger-hover: #c82333;
             --success-color: #28a745;
-            --light-gray: #f4f4f9;
-            --dark-gray: #333;
-            --border-color: #ddd;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --text-color: #212529;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: var(--light-gray);
-            color: var(--dark-gray);
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
         }
         #app-container {
             background: white;
-            padding: 25px 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
             width: 100%;
             max-width: 800px;
             margin: 20px auto;
         }
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { color: var(--dark-gray); font-size: 28px; }
         nav {
             display: flex;
             gap: 10px;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 25px;
+            border-bottom: 1px solid var(--medium-gray);
+            margin-bottom: 30px;
             padding-bottom: 15px;
         }
         .nav-btn {
             padding: 10px 20px;
-            border-radius: 5px;
-            border: 1px solid var(--border-color);
-            background-color: black;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--medium-gray);
+            background-color: #fff;
+            color: var(--dark-gray);
             cursor: pointer;
             font-size: 16px;
             font-weight: 500;
+            transition: all 0.2s ease-in-out;
         }
+        .nav-btn:hover { background-color: #f1f3f5; }
         .nav-btn.active {
             background-color: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
         }
-        h1, h2 { text-align: center; color: var(--dark-gray); }
-        h2 { margin-top: 40px; border-top: 1px dashed var(--border-color); padding-top: 30px;}
+        h2 { margin-top: 40px; border-top: 1px solid var(--medium-gray); padding-top: 30px; text-align: center;}
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
         input, select, textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
             box-sizing: border-box;
             font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        }
+        textarea { resize: vertical; min-height: 100px; }
         button {
             padding: 15px;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease-in-out;
         }
         .btn-primary { width: 100%; background-color: var(--primary-color); }
-        .btn-primary:hover:not(:disabled) { background-color: var(--primary-hover); }
+        .btn-primary:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-1px); }
         .btn-danger { background-color: var(--danger-color); font-size: 14px; padding: 8px 12px; }
         .btn-danger:hover:not(:disabled) { background-color: var(--danger-hover); }
-        button:disabled { background-color: #aaa; cursor: not-allowed; }
-        .status-message { text-align: center; margin-top: 20px; font-weight: bold; min-height: 24px; }
+        button:disabled { background-color: #b0c4de; cursor: not-allowed; }
+        .status-message { text-align: center; margin-top: 20px; font-weight: bold; min-height: 24px; font-size: 14px; }
         .success { color: var(--success-color); }
         .error { color: var(--error-color); }
-        .management-list { list-style: none; padding: 0; }
         .list-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
             padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
             margin-bottom: 10px;
         }
-        .list-item-info { display: flex; flex-direction: column; }
-        .list-item-info strong { font-size: 1.1em; }
-        .list-item-info span { color: #666; font-size: 0.9em; }
+        .list-item-info { flex-grow: 1; }
+        .list-item-info strong { font-size: 1.1em; color: var(--dark-gray); }
+        .list-item-info span { color: #6c757d; font-size: 0.9em; display: block; margin-top: 4px;}
         .content-section { display: none; }
-        .content-section.active { display: block; }
+        .content-section.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div id="app-container">
-        <h1>Keluar Shopping Management Portal</h1>
+        <header>
+            <h1>Keluar Shopping Management Portal</h1>
+        </header>
         <nav>
             <button class="nav-btn active" data-target="add-product-section">Add Product</button>
             <button class="nav-btn" data-target="manage-products-section">Manage Products</button>
@@ -111,15 +129,13 @@
 
         <!-- Section 1: Add Product -->
         <section id="add-product-section" class="content-section active">
-            <h1>Add New Product</h1>
             <form id="product-form">
-                <!-- Form fields from previous version -->
-                <div class="form-group"><label for="name">Product Name</label><input type="text" id="name" required></div>
-                <div class="form-group"><label for="category">Category</label><input list="category-list" type="text" id="category" required><datalist id="category-list"></datalist></div>
-                <div class="form-group"><label for="price">Price</label><input type="number" id="price" min="0" step="0.01" required></div>
-                <div class="form-group"><label for="description">Description</label><textarea id="description" required></textarea></div>
-                <div class="form-group"><label for="imageUrl">Image URL</label><input type="url" id="imageUrl" required></div>
-                <div class="form-group"><label for="rating">Rating (0.0 - 5.0)</label><input type="number" id="rating" min="0" max="5" step="0.1"></div>
+                <div class="form-group"><label for="name">Product Name</label><input type="text" id="name" placeholder="e.g., Modern Velvet Sofa" required></div>
+                <div class="form-group"><label for="category">Category</label><input list="category-list" type="text" id="category" placeholder="Select or type a new category" required><datalist id="category-list"></datalist></div>
+                <div class="form-group"><label for="price">Price</label><input type="number" id="price" min="0" step="0.01" placeholder="e.g., 599.99" required></div>
+                <div class="form-group"><label for="description">Description</label><textarea id="description" placeholder="A brief description of the product." required></textarea></div>
+                <div class="form-group"><label for="imageUrl">Image URL</label><input type="url" id="imageUrl" placeholder="https://example.com/image.jpg" required></div>
+                <div class="form-group"><label for="rating">Rating (0.0 - 5.0)</label><input type="number" id="rating" min="0" max="5" step="0.1" placeholder="e.g., 4.5"></div>
                 <button type="submit" id="add-product-btn" class="btn-primary">Add Product</button>
             </form>
             <p id="add-product-status" class="status-message"></p>
@@ -127,25 +143,21 @@
 
         <!-- Section 2: Manage Products -->
         <section id="manage-products-section" class="content-section">
-            <h1>Manage Products</h1>
             <div id="product-list-container"></div>
         </section>
 
         <!-- Section 3: Manage Promo Codes -->
         <section id="manage-promos-section" class="content-section">
-            <h1>Manage Promo Codes</h1>
             <form id="promo-form">
                 <h2>Create New Promo Code</h2>
                 <div class="form-group"><label for="promo-code">Promo Code (e.g., WINTER25)</label><input type="text" id="promo-code" required></div>
                 <div class="form-group"><label for="discount-type">Discount Type</label><select id="discount-type"><option value="PERCENTAGE">Percentage</option><option value="FIXED">Fixed Amount</option></select></div>
                 <div class="form-group"><label for="promo-value">Value (e.g., 25 for % or 10.00 for fixed)</label><input type="number" id="promo-value" min="0" step="0.01" required></div>
-                <div class="form-group"><label for="promo-expiry">Expiry Date</label><input type="date" id="promo-expiry"></div>
+                <div class="form-group"><label for="promo-expiry">Expiry Date (optional)</label><input type="date" id="promo-expiry"></div>
                 <div class="form-group"><label for="promo-min-value">Minimum Cart Value (optional)</label><input type="number" id="promo-min-value" min="0" step="0.01" placeholder="0.00"></div>
                 <button type="submit" id="add-promo-btn" class="btn-primary">Create Promo Code</button>
             </form>
             <p id="add-promo-status" class="status-message"></p>
-
-            <h2>Existing Promo Codes</h2>
             <div id="promo-list-container"></div>
         </section>
     </div>
@@ -166,8 +178,22 @@
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // --- GLOBAL DOM ELEMENTS ---
+        const productForm = document.getElementById('product-form');
+        const promoForm = document.getElementById('promo-form');
+        const productListContainer = document.getElementById('product-list-container');
+        const promoListContainer = document.getElementById('promo-list-container');
+        const categoryList = document.getElementById('category-list');
+        
+        // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Navigation ---
+            setupNavigation();
+            loadInitialData();
+            setupEventListeners();
+        });
+
+        // --- SETUP FUNCTIONS ---
+        function setupNavigation() {
             const navButtons = document.querySelectorAll('.nav-btn');
             const contentSections = document.querySelectorAll('.content-section');
             navButtons.forEach(button => {
@@ -178,28 +204,23 @@
                     document.getElementById(button.dataset.target).classList.add('active');
                 });
             });
+        }
 
-            // --- Load Initial Data ---
+        function loadInitialData() {
             loadCategories();
-            loadProductsToDelete();
-            loadPromosToDelete();
+            loadProducts();
+            loadPromos();
+        }
 
-            // --- Add Product Logic ---
-            const productForm = document.getElementById('product-form');
+        function setupEventListeners() {
             productForm.addEventListener('submit', handleAddProduct);
-
-            // --- Add Promo Logic ---
-            const promoForm = document.getElementById('promo-form');
             promoForm.addEventListener('submit', handleAddPromo);
-            
-            // --- Delete Logic (Event Delegation) ---
-            document.getElementById('product-list-container').addEventListener('click', handleDeleteProduct);
-            document.getElementById('promo-list-container').addEventListener('click', handleDeletePromo);
-        });
+            productListContainer.addEventListener('click', handleDelete);
+            promoListContainer.addEventListener('click', handleDelete);
+        }
 
-        // --- CATEGORY LOADER ---
+        // --- DATA LOADERS ---
         async function loadCategories() {
-            const categoryList = document.getElementById('category-list');
             try {
                 const snapshot = await db.collection('categories').get();
                 categoryList.innerHTML = '';
@@ -210,8 +231,60 @@
                 });
             } catch (error) { console.error("Error loading categories:", error); }
         }
+
+        async function loadProducts() {
+            const snapshot = await db.collection('products').orderBy('name').get();
+            renderProductList(snapshot.docs);
+        }
+
+        async function loadPromos() {
+            const snapshot = await db.collection('promo_codes').orderBy('code').get();
+            renderPromoList(snapshot.docs);
+        }
+
+        // --- UI RENDERERS ---
+        function renderProductList(docs) {
+            productListContainer.innerHTML = '<h2>Existing Products</h2>';
+            if (docs.length === 0) {
+                productListContainer.innerHTML += '<p>No products found.</p>';
+                return;
+            }
+            docs.forEach(doc => {
+                const product = doc.data();
+                const itemEl = document.createElement('div');
+                itemEl.className = 'list-item';
+                itemEl.innerHTML = `
+                    <div class="list-item-info">
+                        <strong>${product.name}</strong>
+                        <span>ID: ${product.id} | Category: ${product.category} | Price: ${product.price.toFixed(2)}</span>
+                    </div>
+                    <button class="btn-danger" data-type="product" data-id="${product.id}">Delete</button>`;
+                productListContainer.appendChild(itemEl);
+            });
+        }
+
+        function renderPromoList(docs) {
+            promoListContainer.innerHTML = '<h2>Existing Promo Codes</h2>';
+            if (docs.length === 0) {
+                promoListContainer.innerHTML += '<p>No promo codes found.</p>';
+                return;
+            }
+            docs.forEach(doc => {
+                const promo = doc.data();
+                const itemEl = document.createElement('div');
+                itemEl.className = 'list-item';
+                const expiry = promo.expiresAt ? promo.expiresAt.toDate().toLocaleDateString() : 'No Expiry';
+                itemEl.innerHTML = `
+                    <div class="list-item-info">
+                        <strong>${promo.code}</strong>
+                        <span>Type: ${promo.discountType} | Value: ${promo.value} | Expires: ${expiry}</span>
+                    </div>
+                    <button class="btn-danger" data-type="promo" data-id="${promo.code}">Delete</button>`;
+                promoListContainer.appendChild(itemEl);
+            });
+        }
         
-        // --- ADD PRODUCT HANDLER ---
+        // --- EVENT HANDLERS ---
         async function handleAddProduct(e) {
             e.preventDefault();
             const btn = document.getElementById('add-product-btn');
@@ -230,22 +303,20 @@
                 };
                 const categoryName = productData.category;
                 const categoryRef = db.collection('categories').doc(categoryName);
-                const categoryDoc = await categoryRef.get();
-                if (!categoryDoc.exists) {
+                if (!(await categoryRef.get()).exists) {
                     await categoryRef.set({ name: categoryName });
-                    await loadCategories(); // Reload categories
+                    await loadCategories();
                 }
                 await newProductRef.set(productData);
                 status.textContent = 'Product added successfully!'; status.className = 'status-message success';
                 productForm.reset();
-                await loadProductsToDelete(); // Refresh list
+                await loadProducts();
             } catch (error) {
                 console.error("Error adding product:", error);
                 status.textContent = `Error: ${error.message}`; status.className = 'status-message error';
             } finally { btn.disabled = false; }
         }
 
-        // --- ADD PROMO HANDLER ---
         async function handleAddPromo(e) {
             e.preventDefault();
             const btn = document.getElementById('add-promo-btn');
@@ -255,14 +326,12 @@
             const code = document.getElementById('promo-code').value.trim().toUpperCase();
             if (!code) {
                 status.textContent = 'Promo Code cannot be empty.'; status.className = 'status-message error';
-                btn.disabled = false;
-                return;
+                btn.disabled = false; return;
             }
             try {
                 const expiryDate = document.getElementById('promo-expiry').value;
                 const promoData = {
-                    code: code,
-                    discountType: document.getElementById('discount-type').value,
+                    code: code, discountType: document.getElementById('discount-type').value,
                     value: parseFloat(document.getElementById('promo-value').value) || 0,
                     expiresAt: expiryDate ? firebase.firestore.Timestamp.fromDate(new Date(expiryDate)) : null,
                     minCartValue: parseFloat(document.getElementById('promo-min-value').value) || 0,
@@ -270,94 +339,33 @@
                 await db.collection('promo_codes').doc(code).set(promoData);
                 status.textContent = 'Promo code created successfully!'; status.className = 'status-message success';
                 promoForm.reset();
-                await loadPromosToDelete(); // Refresh list
+                await loadPromos();
             } catch (error) {
                 console.error("Error adding promo code:", error);
                 status.textContent = `Error: ${error.message}`; status.className = 'status-message error';
             } finally { btn.disabled = false; }
         }
 
-        // --- LOAD & RENDER LISTS FOR DELETION ---
-        async function loadProductsToDelete() {
-            const container = document.getElementById('product-list-container');
-            container.innerHTML = '<h2>Existing Products</h2>';
-            const snapshot = await db.collection('products').orderBy('name').get();
-            if (snapshot.empty) {
-                container.innerHTML += '<p>No products found.</p>';
-                return;
-            }
-            snapshot.forEach(doc => {
-                const product = doc.data();
-                const itemEl = document.createElement('div');
-                itemEl.className = 'list-item';
-                itemEl.innerHTML = `
-                    <div class="list-item-info">
-                        <strong>${product.name}</strong>
-                        <span>ID: ${product.id} | Category: ${product.category} | Price: ${product.price.toFixed(2)}</span>
-                    </div>
-                    <button class="btn-danger delete-product-btn" data-id="${product.id}">Delete</button>`;
-                container.appendChild(itemEl);
-            });
-        }
-
-        async function loadPromosToDelete() {
-            const container = document.getElementById('promo-list-container');
-            // container.innerHTML = '<h2>Existing Promo Codes</h2>';
-            const snapshot = await db.collection('promo_codes').orderBy('code').get();
-            if (snapshot.empty) {
-                container.innerHTML += '<p>No promo codes found.</p>';
-                return;
-            }
-            snapshot.forEach(doc => {
-                const promo = doc.data();
-                const itemEl = document.createElement('div');
-                itemEl.className = 'list-item';
-                const expiry = promo.expiresAt ? promo.expiresAt.toDate().toLocaleDateString() : 'No Expiry';
-                itemEl.innerHTML = `
-                    <div class="list-item-info">
-                        <strong>${promo.code}</strong>
-                        <span>Type: ${promo.discountType} | Value: ${promo.value} | Expires: ${expiry}</span>
-                    </div>
-                    <button class="btn-danger delete-promo-btn" data-id="${promo.code}">Delete</button>`;
-                container.appendChild(itemEl);
-            });
-        }
-        
-        // --- DELETE HANDLERS ---
-        async function handleDeleteProduct(e) {
-            if (!e.target.classList.contains('delete-product-btn')) return;
+        async function handleDelete(e) {
             const btn = e.target;
-            const productId = btn.dataset.id;
-            if (confirm(`Are you sure you want to delete product with ID: ${productId}?`)) {
+            if (!btn.classList.contains('btn-danger')) return;
+            const type = btn.dataset.type;
+            const id = btn.dataset.id;
+            const collectionName = type === 'product' ? 'products' : 'promo_codes';
+            
+            if (confirm(`Are you sure you want to delete ${type}: ${id}?`)) {
                 btn.disabled = true;
                 btn.textContent = 'Deleting...';
                 try {
-                    await db.collection('products').doc(productId).delete();
+                    await db.collection(collectionName).doc(id).delete();
                     btn.closest('.list-item').remove();
                 } catch (error) {
-                    console.error("Error deleting product:", error);
-                    alert("Could not delete product. See console for details.");
-                    btn.disabled = false;
-                    btn.textContent = 'Delete';
-                }
-            }
-        }
-
-        async function handleDeletePromo(e) {
-            if (!e.target.classList.contains('delete-promo-btn')) return;
-            const btn = e.target;
-            const promoId = btn.dataset.id;
-            if (confirm(`Are you sure you want to delete promo code: ${promoId}?`)) {
-                btn.disabled = true;
-                btn.textContent = 'Deleting...';
-                try {
-                    await db.collection('promo_codes').doc(promoId).delete();
-                    btn.closest('.list-item').remove();
-                } catch (error) {
-                    console.error("Error deleting promo code:", error);
-                    alert("Could not delete promo code. See console for details.");
-                    btn.disabled = false;
-                    btn.textContent = 'Delete';
+                    console.error(`Error deleting ${type}:`, error);
+                    btn.textContent = 'Error!';
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = 'Delete';
+                    }, 2000);
                 }
             }
         }
